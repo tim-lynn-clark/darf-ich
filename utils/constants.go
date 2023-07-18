@@ -1,9 +1,4 @@
-package darfich
-
-type Role string
-type Action string
-type HttpMethod string
-type HttpRoute string
+package utils
 
 // HttpMethod https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 
@@ -20,6 +15,6 @@ const (
 )
 
 const (
-	ActionAllow Action = "allow"
-	ActionDeny  Action = "deny"
+	ActionAllow Action = "ALLOW"
+	ActionDeny  Action = "DENY"
 )
