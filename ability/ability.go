@@ -39,6 +39,7 @@ func (rules *Set) newRule(action utils.Action, role utils.Role,
 		Action:    action,
 		Method:    method,
 		Route:     route,
+		Resource:  resource,
 	}
 	rules.newCredential(rule)
 	rules.Rules[rule.HashKey] = rule
@@ -48,25 +49,23 @@ func (rules *Set) newRule(action utils.Action, role utils.Role,
 
 func (rules *Set) newCredential(rule Rule) {
 	// Find credential
-	var credential *utils.Credential
-	for _, c := range rules.Credentials {
+	for idx, c := range rules.Credentials {
 		if c.Role == rule.Role && c.Resource == rule.Resource {
-			credential = &c
-			break
+			// Add Action to existing credential
+			if !utils.Contains(c.Actions, rule.Method) {
+				rules.Credentials[idx].Actions = append(c.Actions, rule.Method)
+			}
+			// Short circuit since credential already exists
+			return
 		}
 	}
 
-	// Create credential if not found
-	if credential == nil {
-		credential = &utils.Credential{
-			Role:     rule.Role,
-			Resource: rule.Resource,
-		}
-		rules.Credentials = append(rules.Credentials, *credential)
+	// Create credential
+	credential := &utils.Credential{
+		Role:     rule.Role,
+		Resource: rule.Resource,
+		Actions:  []utils.HttpMethod{},
 	}
-
-	// Add Action to credential
-	if !utils.Contains(credential.Actions, rule.Method) {
-		credential.Actions = append(credential.Actions, rule.Method)
-	}
+	credential.Actions = append(credential.Actions, rule.Method)
+	rules.Credentials = append(rules.Credentials, *credential)
 }

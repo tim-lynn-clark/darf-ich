@@ -131,6 +131,7 @@ func TestGenerateCredentials(t *testing.T) {
 		expCredentials     credentials
 		expRuleCount       int
 		expCredentialCount int
+		expActionCount     int
 	}{
 		{
 			name:               "Admin GET Book rule created",
@@ -144,6 +145,7 @@ func TestGenerateCredentials(t *testing.T) {
 			expCredentials:     testOneCredentials,
 			expRuleCount:       1,
 			expCredentialCount: 1,
+			expActionCount:     1,
 		},
 		{
 			name:               "Admin PUT Book rule created",
@@ -157,6 +159,7 @@ func TestGenerateCredentials(t *testing.T) {
 			expCredentials:     testTwoCredentials,
 			expRuleCount:       2,
 			expCredentialCount: 1,
+			expActionCount:     2,
 		},
 		{
 			name:               "Admin POST Book rule created",
@@ -170,6 +173,7 @@ func TestGenerateCredentials(t *testing.T) {
 			expCredentials:     testTwoCredentials,
 			expRuleCount:       3,
 			expCredentialCount: 1,
+			expActionCount:     3,
 		},
 		{
 			name:               "Editor GET Book rule created",
@@ -183,6 +187,7 @@ func TestGenerateCredentials(t *testing.T) {
 			expCredentials:     testTwoCredentials,
 			expRuleCount:       4,
 			expCredentialCount: 2,
+			expActionCount:     1,
 		},
 	}
 
@@ -193,20 +198,55 @@ func TestGenerateCredentials(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			_, err := ruleSet.Can(tc.role, tc.method, tc.route, tc.resource)
 			if err != nil {
-				t.Error(errors.New(fmt.Sprintf("Expected no error but got: %v", err)))
+				t.Error(
+					errors.New(
+						fmt.Sprintf(
+							"Expected no error but got: %v",
+							err,
+						),
+					),
+				)
 			}
 
 			rulesLength := len(ruleSet.Rules)
 			if rulesLength != tc.expRuleCount {
-				t.Error(errors.New(fmt.Sprintf("Expected one rule to exist, but found: %v", rulesLength)))
+				t.Error(
+					errors.New(
+						fmt.Sprintf(
+							"Expected one rule to exist, but found: %v",
+							rulesLength,
+						),
+					),
+				)
 			}
 
 			credentialsLength := len(ruleSet.Credentials)
 			if credentialsLength != tc.expCredentialCount {
-				t.Error(errors.New(fmt.Sprintf("Expected one credential to exist, but found: %v", credentialsLength)))
+				t.Error(
+					errors.New(
+						fmt.Sprintf(
+							"Expected one credential to exist, but found: %v",
+							credentialsLength,
+						),
+					),
+				)
 			}
 
-			//TODO: Verify the right number of actions exist for each credential
+			for _, credential := range ruleSet.Credentials {
+				if credential.Resource == tc.resource &&
+					credential.Role == tc.role &&
+					len(credential.Actions) != tc.expActionCount {
+					t.Error(
+						errors.New(
+							fmt.Sprintf(
+								"Expected %v action(s) to exist, but found: %v",
+								tc.expActionCount,
+								len(credential.Actions),
+							),
+						),
+					)
+				}
+			}
 		})
 	}
 }
