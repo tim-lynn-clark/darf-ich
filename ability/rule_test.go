@@ -83,7 +83,7 @@ func TestGenerateRuleKeys(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			stringKey, hashKey := GenerateRuleKeys(tc.role, tc.method, tc.route, tc.resource)
+			stringKey, hashKey := GenerateRuleKeys(tc.role, tc.method, tc.route)
 
 			var err error
 

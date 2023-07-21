@@ -21,7 +21,7 @@ func (rules *Set) Cannot(role utils.Role, method utils.HttpMethod,
 
 func (rules *Set) newRule(action utils.Action, role utils.Role,
 	method utils.HttpMethod, route utils.HttpRoute, resource utils.Resource) (Rule, error) {
-	stringKey, hashKey := GenerateRuleKeys(role, method, route, resource)
+	stringKey, hashKey := GenerateRuleKeys(role, method, route)
 
 	// Verify the rule doesn't already exist
 	_, ok := rules.Rules[hashKey]

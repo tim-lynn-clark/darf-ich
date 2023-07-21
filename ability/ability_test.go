@@ -37,7 +37,7 @@ func TestCan(t *testing.T) {
 			resource:     "book",
 			expStringKey: "admin | GET | /books | book",
 			expHashKey:   "682af11c5a0f6fe88c9799a215fb41128b34c89c811510ca62d6a8f5c7230592",
-			expError:     &utils.ExistingRuleError{StringKey: "admin | GET | /books | book"},
+			expError:     &utils.ExistingRuleError{StringKey: "admin | GET | /books"},
 		},
 	}
 
@@ -83,7 +83,7 @@ func TestCannot(t *testing.T) {
 			resource:     "book",
 			expStringKey: "admin | GET | /books | book",
 			expHashKey:   "682af11c5a0f6fe88c9799a215fb41128b34c89c811510ca62d6a8f5c7230592",
-			expError:     &utils.ExistingRuleError{StringKey: "admin | GET | /books | book"},
+			expError:     &utils.ExistingRuleError{StringKey: "admin | GET | /books"},
 		},
 	}
 

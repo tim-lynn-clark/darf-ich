@@ -17,9 +17,9 @@ type Rule struct {
 	Resource  utils.Resource
 }
 
-func GenerateRuleKeys(role utils.Role, method utils.HttpMethod, route utils.HttpRoute, resource utils.Resource) (stringKey string, hashKey string) {
+func GenerateRuleKeys(role utils.Role, method utils.HttpMethod, route utils.HttpRoute) (stringKey string, hashKey string) {
 	// Build component key from Role+Method+Route
-	stringKey = string(role) + " | " + string(method) + " | " + string(route) + " | " + string(resource)
+	stringKey = string(role) + " | " + string(method) + " | " + string(route)
 
 	// Create hash of component key
 	sum := sha256.Sum256([]byte(stringKey))
