@@ -30,23 +30,22 @@ func New(config Config) func(*fiber.Ctx) error {
 		method := c.Method()
 		path := c.Path()
 
-		// Generate keys for role+method+route+resource
-		_, hashKey := ability.GenerateRuleKeys(
-			utils.Role(currentUser.RoleName),
-			utils.HttpMethod(method),
-			utils.HttpRoute(path))
-
 		// Search through rules using key for matching rule
+		var valid bool
 		for _, rule := range config.RuleSet.Rules {
-			if rule.HashKey == hashKey {
+			if fiber.RoutePatternMatch(path, string(rule.Route)) &&
+				rule.Method == utils.HttpMethod(method) &&
+				rule.Role == utils.Role(currentUser.RoleName) {
+
 				if rule.Action == utils.ActionAllow {
-					return c.Next()
-				} else {
-					return c.SendStatus(fiber.StatusForbidden)
+					valid = true
 				}
 			}
 		}
 
+		if valid {
+			return c.Next()
+		}
 		// If no rule is found, return 403 Forbidden
 		return c.SendStatus(fiber.StatusForbidden)
 	}

@@ -22,7 +22,7 @@ func TestNew(t *testing.T) {
 	}
 
 	ruleSet := ability.Set{
-		Rules:       map[string]ability.Rule{},
+		Rules:       []ability.Rule{},
 		Credentials: []utils.Credential{},
 	}
 

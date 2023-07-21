@@ -5,7 +5,7 @@ import (
 )
 
 type Set struct {
-	Rules       map[string]Rule    `json:"rules"`
+	Rules       []Rule             `json:"rules"`
 	Credentials []utils.Credential `json:"credentials"`
 }
 
@@ -24,10 +24,11 @@ func (rules *Set) newRule(action utils.Action, role utils.Role,
 	stringKey, hashKey := GenerateRuleKeys(role, method, route)
 
 	// Verify the rule doesn't already exist
-	_, ok := rules.Rules[hashKey]
-	if ok {
-		return Rule{}, &utils.ExistingRuleError{
-			StringKey: stringKey,
+	for _, rule := range rules.Rules {
+		if rule.HashKey == hashKey {
+			return Rule{}, &utils.ExistingRuleError{
+				StringKey: stringKey,
+			}
 		}
 	}
 
@@ -42,7 +43,7 @@ func (rules *Set) newRule(action utils.Action, role utils.Role,
 		Resource:  resource,
 	}
 	rules.newCredential(rule)
-	rules.Rules[rule.HashKey] = rule
+	rules.Rules = append(rules.Rules, rule)
 
 	return rule, nil
 }

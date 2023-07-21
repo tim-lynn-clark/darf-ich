@@ -42,7 +42,7 @@ func TestCan(t *testing.T) {
 	}
 
 	ruleSet := Set{}
-	ruleSet.Rules = make(map[string]Rule)
+	ruleSet.Rules = []Rule{}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -88,7 +88,7 @@ func TestCannot(t *testing.T) {
 	}
 
 	ruleSet := Set{}
-	ruleSet.Rules = make(map[string]Rule)
+	ruleSet.Rules = []Rule{}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -192,7 +192,7 @@ func TestGenerateCredentials(t *testing.T) {
 	}
 
 	ruleSet := Set{}
-	ruleSet.Rules = make(map[string]Rule)
+	ruleSet.Rules = []Rule{}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
