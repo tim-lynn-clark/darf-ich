@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	version string = "v0.1.0"       //https://go.dev/doc/modules/version-numbers
+	version string = "v0.1.1"       //https://go.dev/doc/modules/version-numbers
 	build   string = "202307212029" // YYYYMMDDHHMM
 )
 
@@ -20,7 +20,7 @@ type Config struct {
 	// Optional. Default: nil
 	Next       func(c *fiber.Ctx) bool
 	ContextKey string
-	RuleSet    ability.Set
+	RuleSet    *ability.Set
 }
 
 // New Create a new middleware handler

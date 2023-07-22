@@ -30,8 +30,8 @@ func TestNew(t *testing.T) {
 	_, err := ruleSet.Can(
 		utils.Role(currentUser.RoleName),
 		utils.HttpGet,
-		utils.HttpRoute("/book/:id"),
-		utils.Resource("book"),
+		"/book/:id",
+		"book",
 	)
 	if err != nil {
 		t.Errorf("ruleSet.Can() error = %v", err)
@@ -40,7 +40,7 @@ func TestNew(t *testing.T) {
 	config := Config{
 		Next:       nil,
 		ContextKey: contextKey,
-		RuleSet:    ruleSet,
+		RuleSet:    &ruleSet,
 	}
 
 	app := fiber.New()
