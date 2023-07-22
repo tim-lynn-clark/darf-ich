@@ -2,6 +2,7 @@ package darfich
 
 import (
 	"github.com/gofiber/fiber/v2"
+
 	"github.com/tim-lynn-clark/darfich/ability"
 	"github.com/tim-lynn-clark/darfich/utils"
 )
@@ -31,19 +32,20 @@ func New(config Config) func(*fiber.Ctx) error {
 		path := c.Path()
 
 		// Search through rules using key for matching rule
-		var valid bool
+		var allow bool
 		for _, rule := range config.RuleSet.Rules {
 			if fiber.RoutePatternMatch(path, string(rule.Route)) &&
 				rule.Method == utils.HttpMethod(method) &&
 				rule.Role == utils.Role(currentUser.RoleName) {
 
 				if rule.Action == utils.ActionAllow {
-					valid = true
+					allow = true
 				}
 			}
 		}
 
-		if valid {
+		// If rule is found, and action is allow, continue
+		if allow {
 			return c.Next()
 		}
 		// If no rule is found, return 403 Forbidden

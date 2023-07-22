@@ -1,12 +1,13 @@
 package darfich
 
 import (
-	"github.com/tim-lynn-clark/darfich/ability"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+
+	"github.com/tim-lynn-clark/darfich/ability"
 	"github.com/tim-lynn-clark/darfich/utils"
 )
 
