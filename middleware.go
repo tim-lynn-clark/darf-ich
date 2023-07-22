@@ -1,10 +1,17 @@
 package darfich
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 
 	"github.com/tim-lynn-clark/darfich/ability"
 	"github.com/tim-lynn-clark/darfich/utils"
+)
+
+var (
+	version string = "v0.1.0"       //https://go.dev/doc/modules/version-numbers
+	build   string = "202307212029" // YYYYMMDDHHMM
 )
 
 // Config represents configuration values for the DarfIch package.
@@ -18,6 +25,9 @@ type Config struct {
 
 // New Create a new middleware handler
 func New(config Config) func(*fiber.Ctx) error {
+	fmt.Println("version=", version)
+	fmt.Println("build=", build)
+
 	// Return new Fiber handler
 	return func(c *fiber.Ctx) error {
 		// Don't execute middleware if Next returns true
