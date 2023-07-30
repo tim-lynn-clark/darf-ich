@@ -10,15 +10,18 @@ import (
 )
 
 var (
-	version string = "v0.1.1"       //https://go.dev/doc/modules/version-numbers
-	build   string = "202307212029" // YYYYMMDDHHMM
+	version string = "v0.1.2"       //https://go.dev/doc/modules/version-numbers
+	build   string = "202307292113" // YYYYMMDDHHMM
 )
 
 // Config represents configuration values for the DarfIch package.
 type Config struct {
 	// Next defines a function to skip this middleware when returned true.
 	// Optional. Default: nil
-	Next       func(c *fiber.Ctx) bool
+	Next func(c *fiber.Ctx) bool
+	// Filter defines a function to skip middleware.
+	// Optional. Default: nil
+	Filter     func(*fiber.Ctx) bool
 	ContextKey string
 	RuleSet    *ability.Set
 }
@@ -32,6 +35,11 @@ func New(config Config) func(*fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
 		// Don't execute middleware if Next returns true
 		if config.Next != nil && config.Next(c) {
+			return c.Next()
+		}
+
+		// Filter request to skip middleware
+		if config.Filter != nil && config.Filter(c) {
 			return c.Next()
 		}
 
